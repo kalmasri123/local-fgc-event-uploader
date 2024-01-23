@@ -1,0 +1,26 @@
+{
+  "name": "local-fgc-event-uploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:debug": "nodemon ./src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalmasri123/local-fgc-event-uploader.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kalmasri123/local-fgc-event-uploader/issues"
+  },
+  "homepage": "https://github.com/kalmasri123/local-fgc-event-uploader#readme",
+  "dependencies": {
+    "mongoose": "^8.1.0",
+    "node-fetch": "^2.7.0",
+    "string-similarity-js": "^2.1.4",
+    "ts-node": "^10.9.2"
+  }
+}
