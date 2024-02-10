@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import GuildPreferences from "Models/GuildPreferences";
 import { addTournamentsToGuild } from "@util/discordUtils";
+import { jobQueue, manualEventAdd } from "@util/jobs";
 class AddEventsCommand extends Command {
   constructor() {
     super({
@@ -22,6 +23,7 @@ class AddEventsCommand extends Command {
   }
   async executeCommand(interaction: ChatInputCommandInteraction) {
     await super.executeCommand(interaction);
+    const guild = interaction.guild;
     const guildPreferences = await GuildPreferences.findOne({
       guildId: interaction.guildId,
     });
@@ -31,29 +33,27 @@ class AddEventsCommand extends Command {
       );
       return;
     }
-    if (!guildPreferences.state) {
+    if (guildPreferences.states.length == 0) {
       await interaction.editReply(
         `USA State is not selected. Set state using the /setstate command`
       );
       return;
     }
     await interaction.editReply(`Searching Tournaments in your Area...`);
-    const today = new Date();
-    const tournaments = await getStateTournaments(
-      guildPreferences.state,
-      new Date(
-        today.getTime() - 30 * 24 * 60 * 60 * 1000
-      ),
-      new Date(
-        today.getTime() + guildPreferences.searchWindow * 24 * 60 * 60 * 1000
-      )
+    let stateCount = 0;
+    const cb = async () => {
+      if (++stateCount == guildPreferences.states.length) {
+        await interaction.editReply(`Events queued`);
+      }
+    };
+
+    guildPreferences.states.forEach((state) =>
+      jobQueue.push({
+        args: { guild, state, guildPreferences },
+        action: manualEventAdd,
+        callback: cb,
+      })
     );
-    await addTournamentsToGuild(
-      interaction.guild,
-      tournaments,
-      guildPreferences
-    );
-    await interaction.editReply(`Events queued`);
     // const
   }
 }

@@ -9,17 +9,17 @@ import {
 } from "discord.js";
 import GuildPreferences from "Models/GuildPreferences";
 import { states } from "@util/locations";
-class SetStateCommand extends Command {
+class AddStateCommand extends Command {
   constructor() {
     super({
       minArgs: 2,
-      commandName: "setstate",
+      commandName: "addstate",
       slashCommand: new SlashCommandBuilder()
-        .setName("setstate")
+        .setName("addstate")
         .addStringOption((option) =>
           option.setName("state").setDescription("US State").setRequired(true)
         )
-        .setDescription("Set State as a tournament location to search for")
+        .setDescription("Add State as a tournament location to search for")
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
     });
   }
@@ -33,10 +33,10 @@ class SetStateCommand extends Command {
     const guildPreferences = await GuildPreferences.findOne({
       guildId: interaction.guildId,
     });
-    guildPreferences.state = state;
+    guildPreferences.states.push(state);
     await guildPreferences.save()
-    await interaction.editReply(`Set state to ${states[state]}`);
+    await interaction.editReply(`Added state ${states[state]}`);
     // const
   }
 }
-export default new SetStateCommand();
+export default new AddStateCommand();

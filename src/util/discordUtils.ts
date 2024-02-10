@@ -15,18 +15,13 @@ export const addTournamentsToGuild = async (
   //   guildId: guild.id,
   // });
   const filtered = tournaments.filter((tournament) => {
-    const startDate = new Date(tournament.startAt*1000)
-    const endDate = new Date(tournament.endAt*1000)
-    const today = new Date()
-    console.log(tournament)
     return tournament.events?.find((event) =>
       guildPreferences.games.find((game) => game == event.videogame.slug)
-    ) && ((startDate > today) || (endDate > today));
+    );
   });
   const scheduledEventNames = {}
   const events = (await guild.scheduledEvents.fetch())
   events.forEach((e)=>scheduledEventNames[e.name] = 1)
-  console.log(filtered)
   filtered.forEach(async (tournament) => {
     if(scheduledEventNames[tournament.name]){
         console.log(`${tournament.name} already found... Skipping`)

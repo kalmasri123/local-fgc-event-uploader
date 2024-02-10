@@ -1,4 +1,6 @@
 export const states = {
+    'NC': 'North Carolina',
+
     'AK': 'Alaska',
     'AL': 'Alabama',
     'AR': 'Arkansas',
@@ -26,7 +28,6 @@ export const states = {
     'MO': 'Missouri',
     'MS': 'Mississippi',
     'MT': 'Montana',
-    'NC': 'North Carolina',
     'ND': 'North Dakota',
     'NE': 'Nebraska',
     'NH': 'New Hampshire',

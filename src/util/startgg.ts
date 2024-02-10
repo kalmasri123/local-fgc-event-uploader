@@ -102,7 +102,12 @@ const VIDEOGAMEQUERY = `query VideoGamesByName($name: String!) {
     }
   }
 }`;
+export interface TournamentRequestBody {
+  state:string;
+  startDate?:Date
+  endDate?:Date
 
+}
 const startGGRequest = async (
   query: string,
   variables: { [k: string]: any }
@@ -117,23 +122,23 @@ const startGGRequest = async (
   console.log(json)
   return json.data;
 };
-export const getStateTournaments = async (
-  state: string,
-  start_date: Date = new Date(),
-  end_date: Date = new Date(start_date.getTime() + 30 * 24 * 60 * 60 * 1000)
+
+export const getStateTournaments = async ({
+  state,
+  startDate = new Date(),
+  endDate = new Date(startDate.getTime() + 30 * 24 * 60 * 60 * 1000)
+}:TournamentRequestBody
 ) => {
-  const page_length = 500;
+  const pageLength = 500;
   const variables = {
     state,
     page: 1,
-    startTime: Math.floor(start_date.getTime() / 1000),
-    endTime: Math.floor(end_date.getTime() / 1000),
-    perPage: page_length,
+    startTime: Math.floor(startDate.getTime() / 1000),
+    endTime: Math.floor(endDate.getTime() / 1000),
+    perPage: pageLength,
   };
   const response = await startGGRequest(TOURNAMENTSTATEQUERY, variables);
-  console.log(response);
   const tournaments = response.tournaments.nodes as Tournament[];
-  console.log(tournaments.map(t=>t.name));
   return tournaments;
 };
 export const searchVideoGames = async (name: string) => {

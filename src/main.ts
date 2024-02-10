@@ -5,12 +5,14 @@ import { Command } from "commands/Command";
 import { Client, VoiceChannel, GatewayIntentBits, Events } from "discord.js";
 import mongoose from "mongoose";
 import GuildPreferences from "Models/GuildPreferences";
+import { states } from "@util/locations";
+import { automaticEventAdd, jobQueue } from "@util/jobs";
 
 mongoose.connect(env.MONGOURI);
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 try {
   const client: Client = new Client({
-    intents: [GatewayIntentBits.GuildMessages],
+    intents: [GatewayIntentBits.GuildMessages,GatewayIntentBits.Guilds],
     // retryLimit: Infinity,
     presence: {
       status: "idle",
@@ -23,7 +25,6 @@ try {
 
   client.on("ready", async () => {
     console.log("BOT IS READY");
-    console.log(await getStateTournaments("NC"));
 
     await client.user.setPresence({ status: "online" });
     //Add if not exists
@@ -34,6 +35,20 @@ try {
     });
 
     await registerCommands(client);
+
+    //Load automatic Jobs
+    const locations = Object.keys(states);
+    locations.forEach((state) =>{
+      function pushToQueue(){
+        jobQueue.push({
+          args: { state,client },
+          action: automaticEventAdd,
+          callback:()=>setTimeout(pushToQueue,1000*60*60)
+        })
+      }
+      pushToQueue()
+
+    });
 
     //Create Scheduled events
   });

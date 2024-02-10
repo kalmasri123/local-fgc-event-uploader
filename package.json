@@ -20,6 +20,7 @@
   "dependencies": {
     "mongoose": "^8.1.0",
     "node-fetch": "^2.7.0",
+    "qrate": "^1.2.1",
     "string-similarity-js": "^2.1.4",
     "ts-node": "^10.9.2"
   }

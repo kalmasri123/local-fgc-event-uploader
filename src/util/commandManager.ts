@@ -6,7 +6,6 @@ import { env } from './env';
 
 export const commands = {};
 export const commandNames = readdirSync(join(__dirname, '../commands/')).filter((el) => {
-    console.log(el);
     const extension = '.ts';
     return el != `Command${extension}` && el.endsWith(extension);
 });
@@ -22,7 +21,6 @@ export async function registerCommands(client: Client) {
         .map((el: Command) => {
             return el.slashCommand.toJSON();
         });
-    console.log(registeredCommands)
     // await rest.put(Routes.applicationCommands(env.CLIENT_ID), { body: [] });
 
     // await rest.put(Routes.applicationGuildCommands(env.CLIENT_ID, guild.id), { body: [] });
@@ -30,6 +28,5 @@ export async function registerCommands(client: Client) {
     await rest.put(Routes.applicationCommands(env.CLIENT_ID), {
         body: registeredCommands,
     });
-    console.log('populated');
     // console.log(res);
 }
