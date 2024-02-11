@@ -14,13 +14,13 @@ class SetSearchWindow extends Command {
     super({
       minArgs: 2,
       commandName: "setsearchwindow",
-      slashCommand: new SlashCommandBuilder()
-        .setName("setsearchwindow")
-        .addNumberOption((option) =>
-          option.setName("days").setDescription("Days to look ahead").setMaxValue(30).setMinValue(1).setRequired(true)
-        )
-        .setDescription("Set the search window in days to look for tournaments")
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+      // slashCommand: new SlashCommandBuilder()
+        // .setName("setsearchwindow")
+        // .addNumberOption((option) =>
+        //   option.setName("days").setDescription("Days to look ahead").setMaxValue(30).setMinValue(1).setRequired(true)
+        // )
+        // .setDescription("Set the search window in days to look for tournaments")
+        // .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
     });
   }
   async executeCommand(interaction: ChatInputCommandInteraction) {

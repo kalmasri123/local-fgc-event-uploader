@@ -35,7 +35,7 @@ class AddEventsCommand extends Command {
     }
     if (guildPreferences.states.length == 0) {
       await interaction.editReply(
-        `USA State is not selected. Set state using the /setstate command`
+        `No states selected. Add states using the /addstate command`
       );
       return;
     }
