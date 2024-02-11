@@ -61,7 +61,7 @@ try {
     console.log(commandName);
     try {
       const command: Command = commands[commandName];
-      command.executeCommand(interaction);
+      await command.executeCommand(interaction);
     } catch (error) {
       console.error(error);
       console.error(`Error executing ${interaction.commandName}`);
