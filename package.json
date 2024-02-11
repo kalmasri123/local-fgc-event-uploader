@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node ./src/main.ts --transpileOnly",
     "dev:debug": "nodemon ./src/main.ts"
   },
   "repository": {
