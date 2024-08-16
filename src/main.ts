@@ -12,7 +12,7 @@ mongoose.connect(env.MONGOURI);
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 try {
   const client: Client = new Client({
-    intents: [GatewayIntentBits.GuildMessages,GatewayIntentBits.Guilds],
+    intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.Guilds],
     // retryLimit: Infinity,
     presence: {
       status: "idle",
@@ -38,16 +38,15 @@ try {
 
     //Load automatic Jobs
     const locations = Object.keys(states);
-    locations.forEach((state) =>{
-      function pushToQueue(){
+    locations.forEach((state) => {
+      function pushToQueue() {
         jobQueue.push({
-          args: { state,client },
+          args: { state, client },
           action: automaticEventAdd,
-          callback:()=>setTimeout(pushToQueue,1000*60*60)
-        })
+          callback: () => setTimeout(pushToQueue, 1000 * 60 * 60),
+        });
       }
-      pushToQueue()
-
+      pushToQueue();
     });
 
     //Create Scheduled events
@@ -55,16 +54,27 @@ try {
   client.login(env.BOT_TOKEN);
 
   client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-    // if(interaction.member.permissions)
-    const commandName = interaction.commandName;
-    console.log(commandName);
-    try {
-      const command: Command = commands[commandName];
-      await command.executeCommand(interaction);
-    } catch (error) {
-      console.error(error);
-      console.error(`Error executing ${interaction.commandName}`);
+    if (interaction.isChatInputCommand()) {
+      // if(interaction.member.permissions)
+      const commandName = interaction.commandName;
+      console.log(commandName);
+      try {
+        const command: Command = commands[commandName];
+        await command.executeCommand(interaction);
+      } catch (error) {
+        console.error(error);
+        console.error(`Error executing ${interaction.commandName}`);
+      }
+    } else if (interaction.isAutocomplete()) {
+      try {
+        const commandName = interaction.commandName;
+        const command: Command = commands[commandName];
+        await command.autoComplete(interaction);
+       
+      } catch (error) {
+        console.error(error);
+        console.error(`Error executing ${interaction.commandName}`);
+      }
     }
   });
 } catch (err) {

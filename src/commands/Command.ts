@@ -1,4 +1,5 @@
 import {
+  AutocompleteInteraction,
   CacheType,
   ChatInputCommandInteraction,
   Guild,
@@ -39,18 +40,14 @@ export abstract class Command {
     this.notEnoughArgumentsMessage = notEnoughArgumentsMessage;
     this.slashCommand = slashCommand;
   }
-
+  async autoComplete(interaction: AutocompleteInteraction) {};
   async executeCommand(interaction: ChatInputCommandInteraction) {
     // console.log(interaction.options.data)
     // this.message = message;
     const me = await interaction.guild.members.fetchMe();
 
     await interaction.deferReply();
-    if (
-      !me.permissions.has([
-        PermissionsBitField.Flags.ManageEvents,
-      ])
-    ) {
+    if (!me.permissions.has([PermissionsBitField.Flags.ManageEvents])) {
       await interaction.editReply("Missing Permissions");
       throw new Error("Missing Permissions for Interaction");
     }

@@ -1,6 +1,6 @@
 import * as qrate from "qrate";
 import { TournamentRequestBody, getStateTournaments } from "./startgg";
-import { ActionRow, Guild,Client } from "discord.js";
+import { ActionRow, Guild, Client } from "discord.js";
 import { addTournamentsToGuild } from "./discordUtils";
 import { doesNotMatch } from "assert";
 import GuildPreferences from "Models/GuildPreferences";
@@ -19,24 +19,32 @@ export const manualEventAdd = async ({ guild, state, guildPreferences }) => {
   await addTournamentsToGuild(guild, tournaments, guildPreferences);
 };
 
-export const automaticEventAdd = async ({ state,client }:{state:string,client:Client}) => {
+export const automaticEventAdd = async ({
+  state,
+  client,
+}: {
+  state: string;
+  client: Client;
+}) => {
   const today = new Date();
   const relevantGuilds = await GuildPreferences.find({ states: state });
-  if(relevantGuilds.length == 0) return;
+  if (relevantGuilds.length == 0) return;
 
   const tournaments = await getStateTournaments({
     state,
     startDate: new Date(today.getTime()),
     endDate: new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000),
   });
-  relevantGuilds.forEach(async g=>{
-    const guild = await client.guilds.fetch(g.guildId)
-    console.log(guild.name)
-    if(!guild) return
-    await addTournamentsToGuild(guild, tournaments, g);
-
-  })
-
+  relevantGuilds.forEach(async (g) => {
+    try {
+      const guild = await client.guilds.fetch(g.guildId);
+      console.log(guild.name);
+      if (!guild) return;
+      await addTournamentsToGuild(guild, tournaments, g);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 };
 export interface JobParameters {
   args?: { [key: string]: string };
@@ -44,8 +52,14 @@ export interface JobParameters {
   callback: () => any;
 }
 const worker = async function (data: JobParameters) {
-  await data.action(data.args);
-  data?.callback();
+  // return;
+  try {
+    await data.action(data.args);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    data?.callback();
+  }
   return { ok: true };
 };
 

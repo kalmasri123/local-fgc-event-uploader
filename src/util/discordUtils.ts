@@ -15,9 +15,10 @@ export const addTournamentsToGuild = async (
   //   guildId: guild.id,
   // });
   const filtered = tournaments.filter((tournament) => {
+    const lower = tournament.name.toLowerCase()
     return tournament.events?.find((event) =>
-      guildPreferences.games.find((game) => game == event.videogame.slug)
-    );
+      guildPreferences.games.find((game) => game == event.videogame.slug) 
+    ) && !guildPreferences.blockList.find(e=>e.toLowerCase() == lower);
   });
   const scheduledEventNames = {}
   const events = (await guild.scheduledEvents.fetch())
