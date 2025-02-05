@@ -23,6 +23,7 @@
     "node-fetch": "^2.7.0",
     "qrate": "^1.2.1",
     "string-similarity-js": "^2.1.4",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
   }
 }
