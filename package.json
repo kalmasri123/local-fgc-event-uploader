@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/kalmasri123/local-fgc-event-uploader#readme",
   "dependencies": {
-    "mongoose": "^8.1.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.7",
+    "mongoose": "^8.9.7",
     "node-fetch": "^2.7.0",
-    "qrate": "^1.2.1",
+    "qrate": "^1.2.4",
     "string-similarity-js": "^2.1.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0"

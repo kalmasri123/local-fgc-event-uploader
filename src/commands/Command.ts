@@ -7,6 +7,7 @@ import {
   Message,
   PermissionFlagsBits,
   PermissionsBitField,
+  SharedSlashCommand,
 } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 export type ExecuteFunction = (message: Message) => void;
@@ -16,7 +17,7 @@ interface CommandParameters {
   maxArgs?: number;
   commandName: string;
   notEnoughArgumentsMessage?: string;
-  slashCommand?: SlashCommandBuilder;
+  slashCommand?: SharedSlashCommand;
 }
 export abstract class Command {
   minArgs: number;
@@ -26,7 +27,7 @@ export abstract class Command {
   message: Message;
   args: string[];
   guild: Guild;
-  slashCommand?: SlashCommandBuilder;
+  slashCommand?: SharedSlashCommand;
   constructor({
     minArgs,
     maxArgs,
